@@ -1,5 +1,0 @@
-/home/sebastian/Instruo/tdm_output_example/build/pioasm-install/pioasm/pioasm
-/home/sebastian/Instruo/tdm_output_example/build/pioasm-install/pioasm/pioasmTargets.cmake
-/home/sebastian/Instruo/tdm_output_example/build/pioasm-install/pioasm/pioasmTargets-release.cmake
-/home/sebastian/Instruo/tdm_output_example/build/pioasm-install/pioasm/pioasmConfig.cmake
-/home/sebastian/Instruo/tdm_output_example/build/pioasm-install/pioasm/pioasmConfigVersion.cmake
