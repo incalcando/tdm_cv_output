@@ -1,0 +1,117 @@
+; tdm.pio V2
+;
+; Author: Noe Heuclin
+; Date:   2024-12-10
+;
+; Copyright (c) 2024 Noe Heuclin
+;
+; A TDM output peripheral with master clock (MLCK) output.
+
+.program tdm_sck
+.wrap_target
+    set pins 0
+    set pins 1
+.wrap
+
+.program tdm_output_clocks
+.side_set 2
+public entry_point:
+                    ;        ||  BCK
+                    ;        |   FCK
+frame1:                     
+    set x, 29         side 0b00 
+    pull noblock      side 0b10 
+data1:
+    out pins, 1       side 0b01 
+    jmp x-- data1     side 0b11 
+setYreg:
+    set y, 6          side 0b00 
+    nop               side 0b10
+frame2to8:
+    set x, 29         side 0b00 
+    pull noblock      side 0b10   
+data2to8:
+    out pins, 1       side 0b00 
+    jmp x-- data2to8  side 0b10 
+loopoint:    
+    nop               side 0b00 
+    jmp y-- frame2to8 side 0b10 
+
+.program tdm_output_no_clocks
+public entry_point:
+
+frame1:                     
+    set x, 29         
+    pull noblock    
+data1:
+    out pins, 1      
+    jmp x-- data1   
+setYreg:
+    set y, 6         
+    nop              
+frame2to8:
+    set x, 29        
+    pull noblock    
+data2to8:
+    out pins, 1      
+    jmp x-- data2to8
+loopoint:    
+    nop             
+    jmp y-- frame2to8
+
+
+% c-sdk {
+
+// These constants are the TDM clock to pio clock ratio
+const int tdm_sck_program_pio_mult = 4;
+const int tdm_output_clocks_program_pio_mult = 8; //put to 8 for 8 channels, the actual clock config is done in .c file
+const int tdm_output_no_clocks_program_pio_mult = 8; //put to 8 for 8 channels, the actual clock config is done in .c file
+
+static void tdm_sck_program_init(PIO pio, uint8_t sm, uint8_t offset, uint8_t sck_pin) {
+    pio_gpio_init(pio, sck_pin);
+    pio_sm_config sm_config = tdm_sck_program_get_default_config(offset);
+    sm_config_set_set_pins(&sm_config, sck_pin, 1);
+
+    uint pin_mask = (1u << sck_pin);
+    pio_sm_set_pins_with_mask(pio, sm, 0, pin_mask);  // zero output
+    pio_sm_set_pindirs_with_mask(pio, sm, pin_mask, pin_mask);
+
+    pio_sm_init(pio, sm, offset, &sm_config);
+}
+
+static inline void tdm_out_with_clocks_program_init(PIO pio, uint8_t sm, uint8_t offset, uint8_t bit_depth, uint8_t dout_pin, uint8_t clock_pin_base) {
+    pio_gpio_init(pio, dout_pin);
+    pio_gpio_init(pio, clock_pin_base);
+    pio_gpio_init(pio, clock_pin_base + 1);
+
+    pio_sm_config sm_config = tdm_output_clocks_program_get_default_config(offset);
+    sm_config_set_out_pins(&sm_config, dout_pin, 1);
+
+    sm_config_set_sideset_pins(&sm_config, clock_pin_base);
+
+    sm_config_set_out_shift(&sm_config, false, false, bit_depth);
+    sm_config_set_fifo_join(&sm_config, PIO_FIFO_JOIN_TX);
+    pio_sm_init(pio, sm, offset, &sm_config);
+
+    uint32_t pin_mask = (1u << dout_pin) | (3u << clock_pin_base);
+    pio_sm_set_pins_with_mask(pio, sm, 0, pin_mask);  // zero output
+    pio_sm_set_pindirs_with_mask(pio, sm, pin_mask, pin_mask);
+}
+
+static inline void tdm_out_no_clocks_program_init(PIO pio, uint8_t sm, uint8_t offset, uint8_t bit_depth, uint8_t dout_pin) {
+    
+    pio_gpio_init(pio, dout_pin);
+
+    pio_sm_config sm_config = tdm_output_no_clocks_program_get_default_config(offset);
+    sm_config_set_out_pins(&sm_config, dout_pin, 1);
+    
+    sm_config_set_out_shift(&sm_config, false, false, bit_depth);
+    sm_config_set_fifo_join(&sm_config, PIO_FIFO_JOIN_TX);
+    pio_sm_init(pio, sm, offset, &sm_config);
+
+    uint32_t pin_mask = (1u << dout_pin); //need to double check how that properly works
+    pio_sm_set_pins_with_mask(pio, sm, 0, pin_mask);  // zero output
+    pio_sm_set_pindirs_with_mask(pio, sm, pin_mask, pin_mask);
+}
+
+%}

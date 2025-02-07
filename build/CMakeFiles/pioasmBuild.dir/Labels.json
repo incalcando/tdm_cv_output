@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/CMakeFiles/pioasmBuild"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/CMakeFiles/pioasmBuild.rule"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/CMakeFiles/pioasmBuild-complete.rule"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/pioasm/src/pioasmBuild-stamp/pioasmBuild-build.rule"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/pioasm/src/pioasmBuild-stamp/pioasmBuild-configure.rule"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/pioasm/src/pioasmBuild-stamp/pioasmBuild-download.rule"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/pioasm/src/pioasmBuild-stamp/pioasmBuild-install.rule"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/pioasm/src/pioasmBuild-stamp/pioasmBuild-mkdir.rule"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/pioasm/src/pioasmBuild-stamp/pioasmBuild-patch.rule"
+		},
+		{
+			"file" : "/home/sebastian/Instruo/tdm_output_example/build/pioasm/src/pioasmBuild-stamp/pioasmBuild-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"pioasmBuild"
+		],
+		"name" : "pioasmBuild"
+	}
+}

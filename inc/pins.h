@@ -1,0 +1,14 @@
+#define TDM_MCLK_PIN 4
+#define TDM_TX_PIN 7
+#define TDM_TX2_PIN 1
+#define TDM_FCLK_PIN 5
+#define TDM_BCLK_PIN 6
+
+#define TDM_SDA_PIN 2
+#define TDM_SCL_PIN 3
+#define TDM_I2C_PORT i2c1
+
+#define TDM_BUFFER_FRAMES 128
+#define TDM_CHANNELS 8 
+#define OCTAL_BUFFER_SIZE  (TDM_BUFFER_FRAMES * TDM_CHANNELS) 
+
